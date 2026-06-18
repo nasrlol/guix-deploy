@@ -1,0 +1,14 @@
+(list (channel
+       (name 'guix)
+       (url "https://git.savannah.gnu.org/git/guix.git")
+       (commit
+	"79154f0a09ad748839f88120ddd61a0e1e147b5e"))
+      ;; don't tell anyone :)
+      (channel 
+       (name 'nonguix)
+       (url "https://gitlab.com/nonguix/nonguix.git")
+       (introduction
+	(make-channel-introduction
+	 "897c1a470da759236cc11798f4e0a5f7d4d59fbc"       ;; Enable signature verification
+	 (openpgp-fingerprint
+	  "C535 59B9 23A5 AC6F 63E9  D013 B6BE B96A DB74 D0E6")))))
