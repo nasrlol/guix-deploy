@@ -1,44 +1,35 @@
-;; nasr guix linux home configuration
-;; setup dot files. dev env. etc.
-
-(define %system-mode 'desktop)
-(define %system-mode 'server)
-
-
+;; nasr guix home configuration
 (define-module (guix-home-config)
-
-  ;; TODO: find out what the home stuff does
-
-  ;; home stuff I guess
   #:use-module (gnu home)
   #:use-module (gnu home services)
-  #:use-module (gnu home services shells) ;; used for shell enviroment ( example. zsh, bash, fish, ...) 
+  #:use-module (gnu home services shells)
+  #:use-module (guix gexp)
+  #:use-module (gnu packages))
+
+(define %default-dotguile
+  (plain-file "dotguile" ";; Guile REPL configuration\n(use-modules (ice-9 readline))\n(activate-readline)\n"))
+
+(define %default-xdefaults
+  (plain-file "xdefaults" "*background: #000000\n*foreground: #ffffff\n"))
+
+(define %default-nvim
+  (plain-file "init.lua" ""))
+
+(define %default-zshrc
+  (local-file "./dot/zshrc")
 
 
-  ;; non home stuff i guess
-  #:use-module (gnu services)
-  #:use-module (gnu system shadow)) ;; TODO: find out what this does
-
-
-(define home-config
-  (home-environment
-   (services
-    (append
-     (list
-      (service home-zsh-service-type)
-      
-
-      (service home-files-service-type
-               `((".guile" ,%default-dotguile)
-		 (".Xdefaults" ,%default-xdefaults)))
-
-      (service home-xdg-configuration-files-service-type
-               `(("gdb/gdbinit" ,%default-gdbinit)
-		 ("nano/nanorc" ,%default-nanorc))))
-
-     (service 
-
-     %base-home-services))))
-
-
-  
+(home-environment
+ (packages (list (specification->package "icecat")  ;; TODO: find a new browser
+                 (specification->package "alacritty")
+                 (specification->package "tmux")
+                 (specification->package "git")
+                 (specification->package "neofetch")
+                 (specification->package "rust")
+                 (specification->package "clang")))
+ (services
+  (list
+   (service home-zsh-service-type)
+   (service home-xdg-configuration-files-service-type
+              ("zsh/zshrc" ,%default-zshrc)
+              ("nvim/init.lua" ,%default-nvim))))))
